@@ -186,17 +186,50 @@ public class AutoTraderTests {
 
         homeSearch.carOwnerReview();
 
-        rowString = spreadSheetReader.readRow(3, "Sheet1");
+        rowString = spreadSheetReader.readRow(9, "Sheet1");
         WebElement selectMake = webDriver.findElement(By.cssSelector("#reviewTypeOwnerMake"));
         Select makeOption = new Select(selectMake);
         makeOption.selectByValue(rowString.get(1));
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
         WebElement selectModel = webDriver.findElement(By.cssSelector("#reviewTypeOwnerModel"));
         Select modelOption = new Select(selectModel);
         modelOption.selectByValue(rowString.get(2));
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
         WebElement selectBodyType = webDriver.findElement(By.cssSelector("#reviewTypeOwnerBodytype"));
         Select bodyTypeOption = new Select(selectBodyType);
-        bodyTypeOption.selectByValue(rowString.get(3));
+        bodyTypeOption.selectByVisibleText(rowString.get(3));
+
+        WebElement serachReviewButton = webDriver.findElement(By.cssSelector("#findReviews"));
+        serachReviewButton.click();
+
+        rowString = spreadSheetReader.readRow(10, "Sheet1");
+
+
+
+        WebElement checkIfOnReviewPage = webDriver.findElement(By.cssSelector("#content > div.owner-reviews-top-section.panelMiddle > div.rollup > div.layer > h1"));
+
+        try {
+
+            Assert.assertEquals("search for review completed",rowString.get(1) ,checkIfOnReviewPage.getText() );
+            test.log(Status.PASS, "Successfully on owner review page");
+        } catch (ComparisonFailure a) {
+            test.log(Status.FAIL, "not on owner review page");
+        }
+
+
+
+
     }
 }
